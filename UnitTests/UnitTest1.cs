@@ -16,12 +16,15 @@ namespace UnitTests
             var result = new TriangleS().CalculateTriangleTypeAndCoordinates(sideA, sideB, sideC);
 
             // Assert
-            Assert.AreEqual("Тип треугольника: Равносторонний", result.Item1);
+            Assert.AreEqual("Тип треугольника: Равносторонний", result.Item1); 
         }
 
         [TestCase("3", "3", "4")]
         [TestCase("3", "4", "3")]
         [TestCase("4", "3", "3")]
+        [TestCase("4,0", "3", "3")]
+        [TestCase("4", "3,0", "3")]
+        [TestCase("4", "3", "3,0")]
         public void TestIsoscelesTriangle(string sideA, string sideB, string sideC)
         {
 
@@ -35,6 +38,9 @@ namespace UnitTests
         [TestCase("3", "4", "5")]
         [TestCase("4", "5", "3")]
         [TestCase("5", "3", "4")]
+        [TestCase("5,0", "3", "4")]
+        [TestCase("5", "3,0", "4")]
+        [TestCase("5", "3", "4,0")]
         public void TypeTriangleVersatile(string sideA, string sideB, string sideC)
         {
 
@@ -48,6 +54,9 @@ namespace UnitTests
         [TestCase("1", "2", "5")]
         [TestCase("2", "1", "5")]
         [TestCase("5", "2", "1")]
+        [TestCase("5,0", "2", "1")]
+        [TestCase("5", "2,0", "1")]
+        [TestCase("5", "2", "1,0")]
         public void TestNotTriangle(string sideA, string sideB, string sideC)
         {
             // Arrange
@@ -55,6 +64,7 @@ namespace UnitTests
 
             // Act
             var result = new TriangleS().CalculateTriangleTypeAndCoordinates(sideA, sideB, sideC);
+            Assert.AreEqual(new List<(int, int)> { (-1, -1), (-1, -1), (-1, -1) }, result.Item2);
 
             // Assert
             Assert.AreEqual("Тип треугольника: не треугольник", result.Item1);
@@ -63,6 +73,16 @@ namespace UnitTests
         [TestCase("a", "2", "5")]
         [TestCase("3", "a", "5")]
         [TestCase("3", "2", "a")]
+        [TestCase("", "2", "3")]
+        [TestCase("2", "", "3")]
+        [TestCase("3", "2", "")]
+        [TestCase("  ", "2", "3")]
+        [TestCase("2", "  ", "3")]
+        [TestCase("3", "2", "  ")]
+        [TestCase(null, "2", "3")]
+        [TestCase("2", null, "3")]
+        [TestCase("3", "2", null)]
+
         public void TestNotTriangleInvalid(string sideA, string sideB, string sideC)
         {
 
@@ -71,35 +91,10 @@ namespace UnitTests
 
             // Assert
             Assert.AreEqual("", result.Item1);
-        }
-
-        [TestCase("a", "2", "5")]
-        [TestCase("3", "a", "5")]
-        [TestCase("3", "2", "a")]
-        public void TestNotTriangleInvalidCoordinats(string sideA, string sideB, string sideC)
-        {
-
-            // Act
-            var result = new TriangleS().CalculateTriangleTypeAndCoordinates(sideA, sideB, sideC);
-
-            // Assert
             Assert.AreEqual(new List<(int, int)> { (-2, -2), (-2, -2), (-2, -2) }, result.Item2);
         }
 
-        [TestCase("1", "2", "5")]
-        [TestCase("2", "1", "5")]
-        [TestCase("5", "2", "1")]
-        public void TestNotTriangleCoordinats(string sideA, string sideB, string sideC)
-        {
-            // Arrange
 
-
-            // Act
-            var result = new TriangleS().CalculateTriangleTypeAndCoordinates(sideA, sideB, sideC);
-
-            // Assert
-            Assert.AreEqual(new List<(int, int)> { (-1, -1), (-1, -1), (-1, -1) }, result.Item2);
-        }
 
         [Test]
         public void TestCoordinatesTriangle_LargeValues()
@@ -149,6 +144,28 @@ namespace UnitTests
             Assert.AreEqual(100, Cy);
         }
 
+        [Test]
+        public void MinXIsNegative()
+        {
+            // Arrange
+            int Ax = 1;
+            int Bx = -2;
+            int Cx = 3;
+            int minX = -2;
+
+            // Act
+            if (minX < 0)
+            {
+                Ax += -minX;
+                Bx += -minX;
+                Cx += -minX;
+            }
+
+            // Assert
+            Assert.AreEqual(3, Ax);
+            Assert.AreEqual(0, Bx);
+            Assert.AreEqual(5, Cx);
+        }
 
     }
 }

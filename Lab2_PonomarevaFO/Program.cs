@@ -117,7 +117,7 @@ namespace Lab2_PonomarevaFO
                 Log.Verbose("Логгер сконфигурирован");
                 Log.Information("Приложение запущено");
                 TriangleS tr = new TriangleS();
-                tr.CalculateTriangleTypeAndCoordinates("10", "10", "10");
+                tr.CalculateTriangleTypeAndCoordinates("8", "6", "11");
             }
         }
     }
